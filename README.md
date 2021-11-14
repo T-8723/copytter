@@ -482,7 +482,7 @@ Python3、NodeJS をインストール済みとして想定
 1. GCP の環境を設定する-[参考](https://cloud.google.com/python/django/appengine?hl=ja)
 2. 上記、cloud_sql_proxy.exe を app/api/配下に配置する
 3. API 側、Clinnt 側で別ウィンドウで VSCode を立ち上げ
-4. API : DB ローカル接続設定 `./cloud_sql_proxy -instances=[project nmae]:[Cluod SQL instance]:5432`
+4. API : DB ローカル接続設定 `../../../cloud_sql_proxy -instances=[project nmae]:[Cluod SQL instance]:5432`
 5. API : Django ローカルサーバー立ち上げ `python manage.py runserver`
 6. Client : npm パッケージ依存関係インストール `npm install`
 7. Client : Vue ローカルサーバー立ち上げ `npm run serve`
