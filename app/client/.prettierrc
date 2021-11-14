@@ -1,0 +1,6 @@
+{
+    "printWidth": 100,
+    "semi": true,
+    "endOfLine": "lf",
+    "prettier.jsxSingleQuote": true
+}

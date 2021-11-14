@@ -1,0 +1,29 @@
+{
+  "python.linting.enabled": true,
+  "editor.formatOnSave": true,
+  "editor.tabSize": 4,
+  //標準のpylintをオフにし、PEP8をオン。
+  "python.linting.pylintEnabled": false,
+  "python.linting.flake8Enabled": true,
+  //保存時に構文チェック
+  "python.linting.lintOnSave": true,
+  "python.linting.flake8Args": [
+    // 空行に空白が含まれるとWarningになるW293は、
+    // エディタの自動インデントが引っかかるのでオフ。
+    // +などのオペレータの後で改行すると
+    // WarningになるW504もオフ。
+    "--ignore=W293, W504, E501",
+    // 1行の最大文字数はデフォルト79文字。
+    "--max-line-length=79",
+    // 循環的複雑度(Cyclomatic complexity)は
+    // 分岐の多さを表す指標
+    // 一旦、MAX20で指定。
+    "--max-complexity=20"
+  ],
+  // formatterをautope8に指定
+  "python.formatting.provider": "autopep8",
+  // a == None を a is None に書き換えるような、
+  // より積極的なフォーマッティング
+  "python.formatting.autopep8Args": ["--aggressive", "--aggressive"],
+  "debug.internalConsoleOptions": "neverOpen"
+}

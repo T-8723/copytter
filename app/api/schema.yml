@@ -1,0 +1,448 @@
+openapi: 3.0.3
+info:
+  title: ''
+  version: 0.0.0
+paths:
+  /api/entries/:
+    get:
+      operationId: api_entries_list
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Entry'
+          description: ''
+  /api/follows/:
+    get:
+      operationId: api_follows_list
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Follow'
+          description: ''
+  /api/profile/{id}/:
+    get:
+      operationId: api_profile_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+          description: ''
+  /api/schema/:
+    get:
+      operationId: api_schema_retrieve
+      description: |-
+        OpenApi3 schema for this API. Format can be selected via content negotiation.
+
+        - YAML: application/vnd.oai.openapi
+        - JSON: application/vnd.oai.openapi+json
+      parameters:
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - json
+          - yaml
+      - in: query
+        name: lang
+        schema:
+          type: string
+          enum:
+          - af
+          - ar
+          - ar-dz
+          - ast
+          - az
+          - be
+          - bg
+          - bn
+          - br
+          - bs
+          - ca
+          - cs
+          - cy
+          - da
+          - de
+          - dsb
+          - el
+          - en
+          - en-au
+          - en-gb
+          - eo
+          - es
+          - es-ar
+          - es-co
+          - es-mx
+          - es-ni
+          - es-ve
+          - et
+          - eu
+          - fa
+          - fi
+          - fr
+          - fy
+          - ga
+          - gd
+          - gl
+          - he
+          - hi
+          - hr
+          - hsb
+          - hu
+          - hy
+          - ia
+          - id
+          - ig
+          - io
+          - is
+          - it
+          - ja
+          - ka
+          - kab
+          - kk
+          - km
+          - kn
+          - ko
+          - ky
+          - lb
+          - lt
+          - lv
+          - mk
+          - ml
+          - mn
+          - mr
+          - my
+          - nb
+          - ne
+          - nl
+          - nn
+          - os
+          - pa
+          - pl
+          - pt
+          - pt-br
+          - ro
+          - ru
+          - sk
+          - sl
+          - sq
+          - sr
+          - sr-latn
+          - sv
+          - sw
+          - ta
+          - te
+          - tg
+          - th
+          - tk
+          - tr
+          - tt
+          - udm
+          - uk
+          - ur
+          - uz
+          - vi
+          - zh-hans
+          - zh-hant
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/vnd.oai.openapi:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/yaml:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/vnd.oai.openapi+json:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /api/selfprofile/{user}/:
+    get:
+      operationId: api_selfprofile_retrieve
+      parameters:
+      - in: path
+        name: user
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SelfProfile'
+          description: ''
+  /auth/:
+    post:
+      operationId: auth_create
+      description: |-
+        API View that receives a POST with a user's username and password.
+
+        Returns a JSON Web Token that can be used for authenticated requests.
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JSONWebToken'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/JSONWebToken'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/JSONWebToken'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JSONWebToken'
+          description: ''
+components:
+  schemas:
+    Entry:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        body:
+          type: string
+          maxLength: 300
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/EntryStatusEnum'
+        relation_id:
+          type: string
+          maxLength: 8
+        relation_cont:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        like_count:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        media_close:
+          type: boolean
+        author:
+          type: integer
+      required:
+      - author
+      - body
+      - created_at
+      - id
+      - relation_id
+      - updated_at
+    EntryStatusEnum:
+      enum:
+      - draft
+      - public
+      - close
+      - machine
+      type: string
+    Follow:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user:
+          type: integer
+        follow_user:
+          type: integer
+      required:
+      - follow_user
+      - id
+      - user
+    JSONWebToken:
+      type: object
+      description: |-
+        Serializer class used to validate a username and password.
+
+        'username' is identified by the custom UserModel.USERNAME_FIELD.
+
+        Returns a JSON Web Token that can be used to authenticate later calls.
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+          writeOnly: true
+      required:
+      - password
+      - username
+    Profile:
+      type: object
+      properties:
+        user:
+          type: integer
+        gender:
+          type: string
+          maxLength: 20
+        birth_date:
+          type: string
+          format: date
+          nullable: true
+        location:
+          type: string
+          maxLength: 30
+        age:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        icon_pass:
+          type: string
+          format: uri
+        profile_message:
+          type: string
+          maxLength: 300
+        profile_user_id:
+          type: string
+          maxLength: 32
+        follow_count:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        follower_count:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+      required:
+      - user
+    SelfProfile:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        gender:
+          type: string
+          maxLength: 20
+        birth_date:
+          type: string
+          format: date
+          nullable: true
+        location:
+          type: string
+          maxLength: 30
+        age:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        icon_pass:
+          type: string
+          format: uri
+        profile_message:
+          type: string
+          maxLength: 300
+        status:
+          $ref: '#/components/schemas/SelfProfileStatusEnum'
+        profile_user_id:
+          type: string
+          maxLength: 32
+        sensitive_entry:
+          type: boolean
+        follow_count:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        follower_count:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        profile_first_registed:
+          type: boolean
+        user:
+          type: integer
+      required:
+      - id
+      - user
+    SelfProfileStatusEnum:
+      enum:
+      - machine
+      - public
+      - official
+      - block
+      - close
+      type: string
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid
+    jwtAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "JWT"
