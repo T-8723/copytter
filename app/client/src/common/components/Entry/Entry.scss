@@ -1,14 +1,29 @@
-h3 {
-  margin: 40px 0 0;
+.author-name {
+  text-align: left;
+  padding-left: 5px;
 }
-ul {
-  list-style-type: none;
-  padding: 0;
+
+.entry-body {
+  text-align: left;
 }
-li {
-  display: inline-block;
-  margin: 0 10px;
+
+.el-button {
+  background-color: #b3c0d1;
+  color: var(--el-text-color-primary);
 }
-a {
-  color: #42b983;
+.el-button.is-circle {
+  border-color: #b3c0d1;
+}
+
+.el-footer {
+  border-top: ridge;
+  margin-bottom: 10px;
+  background-color: #e9eef3;
+  color: var(--el-text-color-primary);
+  .footer-relation-cont {
+    color: rgb(161, 161, 161);
+  }
+  .footer-like-cont {
+    color: rgb(161, 161, 161);
+  }
 }

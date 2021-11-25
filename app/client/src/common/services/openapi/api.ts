@@ -35,6 +35,18 @@ export interface Entry {
     'id': number;
     /**
      * 
+     * @type {User}
+     * @memberof Entry
+     */
+    'author': User;
+    /**
+     * 
+     * @type {Profile}
+     * @memberof Entry
+     */
+    'profile': Profile;
+    /**
+     * 
      * @type {string}
      * @memberof Entry
      */
@@ -81,12 +93,6 @@ export interface Entry {
      * @memberof Entry
      */
     'media_close'?: boolean;
-    /**
-     * 
-     * @type {number}
-     * @memberof Entry
-     */
-    'author': number;
 }
 /**
  * 
@@ -310,13 +316,32 @@ export interface SelfProfile {
  */
 
 export enum SelfProfileStatusEnum {
-    Machine = 'machine',
-    Public = 'public',
+    Close = 'close',
     Official = 'official',
     Block = 'block',
-    Close = 'close'
+    Machine = 'machine',
+    Public = 'public'
 }
 
+/**
+ * 
+ * @export
+ * @interface User
+ */
+export interface User {
+    /**
+     * 
+     * @type {number}
+     * @memberof User
+     */
+    'id': number;
+    /**
+     * この項目は必須です。半角アルファベット、半角数字、@/./+/-/_ で150文字以下にしてください。
+     * @type {string}
+     * @memberof User
+     */
+    'username': string;
+}
 
 /**
  * ApiApi - axios parameter creator
@@ -402,15 +427,15 @@ export const ApiApiAxiosParamCreator = function (configuration?: Configuration) 
         },
         /**
          * 
-         * @param {number} id 
+         * @param {number} user 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiProfileRetrieve: async (id: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'id' is not null or undefined
-            assertParamExists('apiProfileRetrieve', 'id', id)
-            const localVarPath = `/api/profile/{id}/`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+        apiProfileRetrieve: async (user: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'user' is not null or undefined
+            assertParamExists('apiProfileRetrieve', 'user', user)
+            const localVarPath = `/api/profile/{user}/`
+                .replace(`{${"user"}}`, encodeURIComponent(String(user)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -532,6 +557,48 @@ export const ApiApiAxiosParamCreator = function (configuration?: Configuration) 
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiUserRetrieve: async (id: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('apiUserRetrieve', 'id', id)
+            const localVarPath = `/api/user/{id}/`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication basicAuth required
+            // http basic authentication required
+            setBasicAuthToObject(localVarRequestOptions, configuration)
+
+            // authentication cookieAuth required
+
+            // authentication jwtAuth required
+            await setApiKeyToObject(localVarHeaderParameter, "Authorization", configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -562,12 +629,12 @@ export const ApiApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {number} id 
+         * @param {number} user 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiProfileRetrieve(id: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Profile>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiProfileRetrieve(id, options);
+        async apiProfileRetrieve(user: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Profile>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiProfileRetrieve(user, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -589,6 +656,16 @@ export const ApiApiFp = function(configuration?: Configuration) {
          */
         async apiSelfprofileRetrieve(user: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SelfProfile>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiSelfprofileRetrieve(user, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiUserRetrieve(id: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiUserRetrieve(id, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -619,12 +696,12 @@ export const ApiApiFactory = function (configuration?: Configuration, basePath?:
         },
         /**
          * 
-         * @param {number} id 
+         * @param {number} user 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiProfileRetrieve(id: number, options?: any): AxiosPromise<Profile> {
-            return localVarFp.apiProfileRetrieve(id, options).then((request) => request(axios, basePath));
+        apiProfileRetrieve(user: number, options?: any): AxiosPromise<Profile> {
+            return localVarFp.apiProfileRetrieve(user, options).then((request) => request(axios, basePath));
         },
         /**
          * OpenApi3 schema for this API. Format can be selected via content negotiation.  - YAML: application/vnd.oai.openapi - JSON: application/vnd.oai.openapi+json
@@ -644,6 +721,15 @@ export const ApiApiFactory = function (configuration?: Configuration, basePath?:
          */
         apiSelfprofileRetrieve(user: number, options?: any): AxiosPromise<SelfProfile> {
             return localVarFp.apiSelfprofileRetrieve(user, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiUserRetrieve(id: number, options?: any): AxiosPromise<User> {
+            return localVarFp.apiUserRetrieve(id, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -677,13 +763,13 @@ export class ApiApi extends BaseAPI {
 
     /**
      * 
-     * @param {number} id 
+     * @param {number} user 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ApiApi
      */
-    public apiProfileRetrieve(id: number, options?: AxiosRequestConfig) {
-        return ApiApiFp(this.configuration).apiProfileRetrieve(id, options).then((request) => request(this.axios, this.basePath));
+    public apiProfileRetrieve(user: number, options?: AxiosRequestConfig) {
+        return ApiApiFp(this.configuration).apiProfileRetrieve(user, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -707,6 +793,17 @@ export class ApiApi extends BaseAPI {
      */
     public apiSelfprofileRetrieve(user: number, options?: AxiosRequestConfig) {
         return ApiApiFp(this.configuration).apiSelfprofileRetrieve(user, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ApiApi
+     */
+    public apiUserRetrieve(id: number, options?: AxiosRequestConfig) {
+        return ApiApiFp(this.configuration).apiUserRetrieve(id, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

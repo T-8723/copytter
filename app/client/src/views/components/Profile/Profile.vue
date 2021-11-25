@@ -38,7 +38,9 @@
             </el-popover>
           </el-form-item>
 
-          <el-form-item> </el-form-item>
+          <el-form-item>
+            <el-button @submit="registProfile">登録</el-button>
+          </el-form-item>
         </el-form>
       </div>
     </el-main>

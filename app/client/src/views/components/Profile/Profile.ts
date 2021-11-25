@@ -57,4 +57,8 @@ export default class Profile extends Vue {
       this.form = user;
     }
   }
+
+  registProfile(): void {
+    this.$router.push("");
+  }
 }

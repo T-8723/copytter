@@ -2,12 +2,16 @@ import { Options, Vue } from "vue-class-component";
 
 import { ApiApi, SelfProfile } from "@/common/services/openapi";
 import { AuthInfo } from "@/common/types/common";
+import { Location, Document, Menu as IconMenu, Setting } from "@element-plus/icons";
 
-@Options({})
+@Options({
+  components: { Location, Document, IconMenu, Setting },
+})
 export default class Main extends Vue {
   API = new ApiApi(undefined, process.env.VUE_APP_API_BASE_URL);
 
   user!: SelfProfile;
+  isCollapse = true;
 
   get visibleLoginButton(): boolean {
     return this.user?.profile_user_id ? false : true;

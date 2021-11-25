@@ -1,12 +1,11 @@
 <template>
   <Main>
-    <button @click="getProfile">プロフィール取得</button>
-    <el-scrollbar height="auto">
-      <p v-for="item in 20" :key="item" class="scrollbar-demo-item">
-        <Entry />
-      </p>
+    <el-scrollbar v-if="entries.length > 0" height="100">
+      <div v-for="entry in entries" :key="entry.id">
+        <Entry :entry="entry" />
+      </div>
     </el-scrollbar>
-    <div class="home"></div>
+    <el-empty v-else :image-size="150" description="description"></el-empty>
   </Main>
 </template>
 
