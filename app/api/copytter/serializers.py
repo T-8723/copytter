@@ -1,14 +1,25 @@
 from rest_framework import serializers
 from .models import Entry, Follow, Profile
+from django.contrib.auth.models import User
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'username')
 
 
 class SelfProfileSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+
     class Meta:
         model = Profile
         fields = '__all__'
 
 
 class ProfileSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+
     class Meta:
         model = Profile
         fields = (
@@ -32,6 +43,8 @@ class FollowSerializer(serializers.ModelSerializer):
 
 
 class EntrySerializer(serializers.ModelSerializer):
+    author = ProfileSerializer()
+
     class Meta:
         model = Entry
         fields = '__all__'

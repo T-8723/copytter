@@ -40,23 +40,25 @@ class Profile(models.Model):
         (STATUS_BLOCK, '凍結')
     }
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    gender = models.CharField(max_length=20, blank=True)
-    birth_date = models.DateField(null=True, blank=True)
-    location = models.CharField(max_length=30, blank=True)
-    age = models.IntegerField(default=0, blank=True)
-    icon_pass = models.ImageField(upload_to='images/', blank=True)
-    profile_message = models.TextField(max_length=300, blank=True)
+    profile_user_id = models.CharField(
+        default=randomname(10), max_length=32, unique=True)
+
     status = models.CharField(
         max_length=10,
         choices=ACCOUNTS_STATUS,
         default='publish')
-    profile_user_id = models.CharField(
-        default=randomname(10), max_length=32, unique=True)
-    sensitive_entry = models.BooleanField(default=False)
+
+    age = models.IntegerField(default=0, blank=True)
+    birth_date = models.DateField(null=True, blank=True)
     follow_count = models.IntegerField(default=0)
     follower_count = models.IntegerField(default=0)
+    gender = models.CharField(max_length=20, blank=True)
+    icon_pass = models.ImageField(upload_to='images/', blank=True)
+    location = models.CharField(max_length=30, blank=True)
     profile_first_registed = models.BooleanField(default=False)
+    profile_message = models.TextField(max_length=300, blank=True)
+    sensitive_entry = models.BooleanField(default=False)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     def __repr__(self):
         return "{}".format(self.user.username)
@@ -65,10 +67,10 @@ class Profile(models.Model):
 
 
 class Follow(models.Model):
-    user = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name='user')
     follow_user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='follow_user')
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='user')
 
 
 class Entry(models.Model):
@@ -83,18 +85,17 @@ class Entry(models.Model):
         (STATUS_CLOSE, '非公開'),
         (STATUS_BOT, 'BOT')
     )
-
-    body = models.TextField(max_length=300)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
     status = models.CharField(
         choices=STATUS_SET, default=STATUS_DRAFT, max_length=8)
-    relation_id = models.CharField(max_length=8)
-    relation_cont = models.IntegerField(default=0)
+
+    author = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    body = models.TextField(max_length=300)
+    created_at = models.DateTimeField(auto_now_add=True)
     like_count = models.IntegerField(default=0)
     media_close = models.BooleanField(default=False)
-    author = models.ForeignKey(
-        User, on_delete=models.CASCADE)
+    relation_cont = models.IntegerField(default=0)
+    relation_id = models.CharField(max_length=8, blank=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __repr__(self):
         return "{}: {}".format(self.author, self.id)
@@ -103,6 +104,6 @@ class Entry(models.Model):
 
 
 class Media(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
     media_type = models.CharField(max_length=8)
     media_url = models.URLField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE)

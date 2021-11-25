@@ -5,7 +5,14 @@ from rest_framework.response import Response
 from django_filters import rest_framework as filters
 
 from .models import Entry, Follow, Profile
-from .serializers import EntrySerializer, FollowSerializer, SelfProfileSerializer, ProfileSerializer
+from django.contrib.auth.models import User
+from .serializers import EntrySerializer, FollowSerializer, SelfProfileSerializer, ProfileSerializer, UserSerializer
+
+
+class UserRetrieveAPIView(generics.RetrieveAPIView):
+    permission_classes = (AllowAny,)
+    serializer_class = UserSerializer
+    queryset = User.objects.all()
 
 
 class SelfProfileRetrieveAPIView(generics.RetrieveAPIView):
@@ -18,6 +25,7 @@ class SelfProfileRetrieveAPIView(generics.RetrieveAPIView):
 class ProfileLitsAPIView(generics.RetrieveAPIView):
     permission_classes = (AllowAny,)
     serializer_class = ProfileSerializer
+    lookup_field = 'user'
     queryset = Profile.objects.all()
 
 

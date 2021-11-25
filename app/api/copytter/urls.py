@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import EntryListAPIView, FollowListAPIView, ProfileLitsAPIView, SelfProfileRetrieveAPIView
+from .views import EntryListAPIView, FollowListAPIView, ProfileLitsAPIView, SelfProfileRetrieveAPIView, UserRetrieveAPIView
 
 
 urlpatterns = [
@@ -8,7 +8,10 @@ urlpatterns = [
         SelfProfileRetrieveAPIView.as_view(),
         name="detail"),
     path(
-        'profile/<int:pk>/',
+        'user/<int:pk>/',
+        UserRetrieveAPIView.as_view()),
+    path(
+        'profile/<int:user>/',
         ProfileLitsAPIView.as_view(),
         name="detail"),
     path(

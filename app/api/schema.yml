@@ -41,12 +41,12 @@ paths:
                 items:
                   $ref: '#/components/schemas/Follow'
           description: ''
-  /api/profile/{id}/:
+  /api/profile/{user}/:
     get:
       operationId: api_profile_retrieve
       parameters:
       - in: path
-        name: id
+        name: user
         schema:
           type: integer
         required: true
@@ -230,6 +230,29 @@ paths:
               schema:
                 $ref: '#/components/schemas/SelfProfile'
           description: ''
+  /api/user/{id}/:
+    get:
+      operationId: api_user_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
   /auth/:
     post:
       operationId: auth_create
@@ -266,6 +289,10 @@ components:
         id:
           type: integer
           readOnly: true
+        author:
+          $ref: '#/components/schemas/User'
+        profile:
+          $ref: '#/components/schemas/Profile'
         body:
           type: string
           maxLength: 300
@@ -292,13 +319,12 @@ components:
           minimum: -2147483648
         media_close:
           type: boolean
-        author:
-          type: integer
       required:
       - author
       - body
       - created_at
       - id
+      - profile
       - relation_id
       - updated_at
     EntryStatusEnum:
@@ -427,12 +453,27 @@ components:
       - user
     SelfProfileStatusEnum:
       enum:
-      - machine
-      - public
+      - close
       - official
       - block
-      - close
+      - machine
+      - public
       type: string
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          title: ユーザー名
+          description: この項目は必須です。半角アルファベット、半角数字、@/./+/-/_ で150文字以下にしてください。
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+      required:
+      - id
+      - username
   securitySchemes:
     basicAuth:
       type: http
