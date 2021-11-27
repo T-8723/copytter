@@ -23,7 +23,7 @@ export default class Home extends Vue {
         if (entries.length > 0) {
           this.entries = entries;
           entries.forEach((item) => {
-            this.getProfile(item.author.id);
+            this.getProfile(item.author.user.id);
           });
         }
       })

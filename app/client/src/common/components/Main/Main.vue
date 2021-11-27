@@ -36,9 +36,32 @@
     >
     <el-container>
       <el-header class="header-container">
-        <el-link v-if="visibleLoginButton" @click="toAuth">ログイン</el-link>
+        <el-link v-if="visibleOnlyLoginedUser" @click="toAuth">ログイン</el-link>
+        <el-row v-if="!visibleOnlyLoginedUser">
+          <el-col :span="1">
+            <el-avatar :size="50" :src="circleUrl"></el-avatar>
+          </el-col>
+          <el-col :span="22" class="author-name">{{ profile?.user?.username }}</el-col>
+          <el-col :span="1">
+            <el-popover placement="left" :width="400" trigger="click">
+              <template #reference>
+                <el-button circle class="menu-button">
+                  <el-icon>
+                    <more />
+                  </el-icon>
+                </el-button>
+              </template>
+            </el-popover>
+          </el-col>
+        </el-row>
       </el-header>
-      <el-main><slot></slot></el-main>
+      <el-main>
+        <el-affix v-if="!visibleOnlyLoginedUser" :offset="88">
+          <el-input v-model="textarea" :rows="5" type="textarea" placeholder="Please input" />
+          <el-button class="send_button" type="primary" @click="sendEntry">投稿</el-button>
+        </el-affix>
+        <slot></slot>
+      </el-main>
     </el-container>
   </el-container>
 </template>

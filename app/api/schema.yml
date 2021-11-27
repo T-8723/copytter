@@ -3,6 +3,34 @@ info:
   title: ''
   version: 0.0.0
 paths:
+  /api/create/entry/:
+    post:
+      operationId: api_create_entry_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Entry'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Entry'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Entry'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Entry'
+          description: ''
   /api/entries/:
     get:
       operationId: api_entries_list
@@ -230,6 +258,71 @@ paths:
               schema:
                 $ref: '#/components/schemas/SelfProfile'
           description: ''
+  /api/update/selfprofile/{id}/:
+    put:
+      operationId: api_update_selfprofile_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateSelfProfile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UpdateSelfProfile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UpdateSelfProfile'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateSelfProfile'
+          description: ''
+    patch:
+      operationId: api_update_selfprofile_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUpdateSelfProfile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUpdateSelfProfile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUpdateSelfProfile'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateSelfProfile'
+          description: ''
   /api/user/{id}/:
     get:
       operationId: api_user_retrieve
@@ -290,9 +383,9 @@ components:
           type: integer
           readOnly: true
         author:
-          $ref: '#/components/schemas/User'
-        profile:
           $ref: '#/components/schemas/Profile'
+        status:
+          $ref: '#/components/schemas/EntryStatusEnum'
         body:
           type: string
           maxLength: 300
@@ -300,32 +393,28 @@ components:
           type: string
           format: date-time
           readOnly: true
-        updated_at:
-          type: string
-          format: date-time
-          readOnly: true
-        status:
-          $ref: '#/components/schemas/EntryStatusEnum'
-        relation_id:
-          type: string
-          maxLength: 8
-        relation_cont:
-          type: integer
-          maximum: 2147483647
-          minimum: -2147483648
         like_count:
           type: integer
           maximum: 2147483647
           minimum: -2147483648
         media_close:
           type: boolean
+        relation_cont:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        relation_id:
+          type: string
+          maxLength: 8
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
       required:
       - author
       - body
       - created_at
       - id
-      - profile
-      - relation_id
       - updated_at
     EntryStatusEnum:
       enum:
@@ -340,9 +429,9 @@ components:
         id:
           type: integer
           readOnly: true
-        user:
-          type: integer
         follow_user:
+          type: integer
+        user:
           type: integer
       required:
       - follow_user
@@ -365,11 +454,9 @@ components:
       required:
       - password
       - username
-    Profile:
+    PatchedUpdateSelfProfile:
       type: object
       properties:
-        user:
-          type: integer
         gender:
           type: string
           maxLength: 20
@@ -386,7 +473,35 @@ components:
           minimum: -2147483648
         icon_pass:
           type: string
-          format: uri
+        profile_message:
+          type: string
+          maxLength: 300
+        profile_user_id:
+          type: string
+          maxLength: 32
+        profile_first_registed:
+          type: boolean
+    Profile:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+        gender:
+          type: string
+          maxLength: 20
+        birth_date:
+          type: string
+          format: date
+          nullable: true
+        location:
+          type: string
+          maxLength: 30
+        age:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        icon_pass:
+          type: string
         profile_message:
           type: string
           maxLength: 300
@@ -409,6 +524,58 @@ components:
         id:
           type: integer
           readOnly: true
+        user:
+          $ref: '#/components/schemas/User'
+        profile_user_id:
+          type: string
+          maxLength: 32
+        status:
+          $ref: '#/components/schemas/SelfProfileStatusEnum'
+        age:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        birth_date:
+          type: string
+          format: date
+          nullable: true
+        follow_count:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        follower_count:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        gender:
+          type: string
+          maxLength: 20
+        icon_pass:
+          type: string
+        location:
+          type: string
+          maxLength: 30
+        profile_first_registed:
+          type: boolean
+        profile_message:
+          type: string
+          maxLength: 300
+        sensitive_entry:
+          type: boolean
+      required:
+      - id
+      - user
+    SelfProfileStatusEnum:
+      enum:
+      - close
+      - block
+      - public
+      - machine
+      - official
+      type: string
+    UpdateSelfProfile:
+      type: object
+      properties:
         gender:
           type: string
           maxLength: 20
@@ -425,40 +592,14 @@ components:
           minimum: -2147483648
         icon_pass:
           type: string
-          format: uri
         profile_message:
           type: string
           maxLength: 300
-        status:
-          $ref: '#/components/schemas/SelfProfileStatusEnum'
         profile_user_id:
           type: string
           maxLength: 32
-        sensitive_entry:
-          type: boolean
-        follow_count:
-          type: integer
-          maximum: 2147483647
-          minimum: -2147483648
-        follower_count:
-          type: integer
-          maximum: 2147483647
-          minimum: -2147483648
         profile_first_registed:
           type: boolean
-        user:
-          type: integer
-      required:
-      - id
-      - user
-    SelfProfileStatusEnum:
-      enum:
-      - close
-      - official
-      - block
-      - machine
-      - public
-      type: string
     User:
       type: object
       properties:

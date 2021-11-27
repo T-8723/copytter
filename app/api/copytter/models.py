@@ -46,19 +46,19 @@ class Profile(models.Model):
     status = models.CharField(
         max_length=10,
         choices=ACCOUNTS_STATUS,
-        default='publish')
+        default=STATUS_PUBLIC)
 
     age = models.IntegerField(default=0, blank=True)
     birth_date = models.DateField(null=True, blank=True)
     follow_count = models.IntegerField(default=0)
     follower_count = models.IntegerField(default=0)
     gender = models.CharField(max_length=20, blank=True)
-    icon_pass = models.ImageField(upload_to='images/', blank=True)
+    icon_pass = models.TextField(blank=True)
     location = models.CharField(max_length=30, blank=True)
     profile_first_registed = models.BooleanField(default=False)
     profile_message = models.TextField(max_length=300, blank=True)
     sensitive_entry = models.BooleanField(default=False)
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True)
 
     def __repr__(self):
         return "{}".format(self.user.username)

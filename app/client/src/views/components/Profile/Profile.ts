@@ -13,7 +13,7 @@ export default class Profile extends Vue {
   };
 
   API = new ApiApi(undefined, process.env.VUE_APP_API_BASE_URL);
-  auth_check = true;
+  regist_check = true;
 
   form: SelfProfile = {
     id: 0,
@@ -27,7 +27,10 @@ export default class Profile extends Vue {
     profile_user_id: undefined,
     sensitive_entry: undefined,
     profile_first_registed: false,
-    user: 0,
+    user: {
+      id: NaN,
+      username: "",
+    },
   };
 
   rules: FormRulesMap = {};
@@ -39,17 +42,19 @@ export default class Profile extends Vue {
   data(): {
     form: SelfProfile;
     rules: FormRulesMap;
+    regist_check: boolean;
   } {
     return {
       form: this.form,
       rules: this.rules,
+      regist_check: this.regist_check,
     };
   }
 
   private checkLoginUser() {
     const authInfo: AuthInfo = this.$store.getters["auth/getUserInfo"];
     const token: string | undefined = this.$store.getters["auth/getToken"];
-    const user: SelfProfile = this.$store.getters["user/getUser"];
+    const user: SelfProfile = this.$store.getters["profile/getProfiler"];
 
     if (!authInfo.user_id || token === "") {
       this.$router.push("Home");
@@ -59,6 +64,29 @@ export default class Profile extends Vue {
   }
 
   registProfile(): void {
-    this.$router.push("");
+    this.regist_check = true;
+    const token: string | undefined = this.$store.getters["auth/getToken"];
+
+    if (!this.form.profile_first_registed) {
+      this.form.profile_first_registed = true;
+    }
+
+    this.API.apiUpdateSelfprofilePartialUpdate(
+      this.form.id,
+      {
+        ...this.form,
+      },
+      {
+        headers: {
+          Authorization: `JWT ${token}`,
+        },
+      }
+    )
+      .then(() => {
+        this.$router.push("Home");
+      })
+      .catch(() => {
+        this.regist_check = false;
+      });
   }
 }

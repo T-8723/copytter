@@ -2,10 +2,10 @@ import { Module } from "vuex";
 
 import { SelfProfile } from "@/common/services/openapi";
 
-export const UserhModule: Module<{ user: SelfProfile }, unknown> = {
+export const ProfileModule: Module<{ profile: SelfProfile }, unknown> = {
   namespaced: true,
   state: {
-    user: {
+    profile: {
       id: 0,
       gender: undefined,
       birth_date: undefined,
@@ -17,22 +17,25 @@ export const UserhModule: Module<{ user: SelfProfile }, unknown> = {
       profile_user_id: undefined,
       sensitive_entry: undefined,
       profile_first_registed: false,
-      user: 0,
+      user: {
+        id: NaN,
+        username: "",
+      },
     },
   },
   getters: {
-    getUser: (state): SelfProfile => {
-      return state.user;
+    getProfiler: (state): SelfProfile => {
+      return state.profile;
     },
   },
   actions: {
-    setUser({ commit }, user: SelfProfile) {
-      commit("setUser", user);
+    setProfile({ commit }, profile: SelfProfile) {
+      commit("setProfile", profile);
     },
   },
   mutations: {
-    setUser(state, user: SelfProfile) {
-      state.user = user;
+    setProfile(state, profile: SelfProfile) {
+      state.profile = profile;
     },
   },
 };

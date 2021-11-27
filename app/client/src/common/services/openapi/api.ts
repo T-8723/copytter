@@ -35,16 +35,16 @@ export interface Entry {
     'id': number;
     /**
      * 
-     * @type {User}
-     * @memberof Entry
-     */
-    'author': User;
-    /**
-     * 
      * @type {Profile}
      * @memberof Entry
      */
-    'profile': Profile;
+    'author': Profile;
+    /**
+     * 
+     * @type {EntryStatusEnum}
+     * @memberof Entry
+     */
+    'status'?: EntryStatusEnum;
     /**
      * 
      * @type {string}
@@ -59,30 +59,6 @@ export interface Entry {
     'created_at': string;
     /**
      * 
-     * @type {string}
-     * @memberof Entry
-     */
-    'updated_at': string;
-    /**
-     * 
-     * @type {EntryStatusEnum}
-     * @memberof Entry
-     */
-    'status'?: EntryStatusEnum;
-    /**
-     * 
-     * @type {string}
-     * @memberof Entry
-     */
-    'relation_id': string;
-    /**
-     * 
-     * @type {number}
-     * @memberof Entry
-     */
-    'relation_cont'?: number;
-    /**
-     * 
      * @type {number}
      * @memberof Entry
      */
@@ -93,6 +69,24 @@ export interface Entry {
      * @memberof Entry
      */
     'media_close'?: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof Entry
+     */
+    'relation_cont'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof Entry
+     */
+    'relation_id'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Entry
+     */
+    'updated_at': string;
 }
 /**
  * 
@@ -124,13 +118,13 @@ export interface Follow {
      * @type {number}
      * @memberof Follow
      */
-    'user': number;
+    'follow_user': number;
     /**
      * 
      * @type {number}
      * @memberof Follow
      */
-    'follow_user': number;
+    'user': number;
 }
 /**
  * Serializer class used to validate a username and password.  \'username\' is identified by the custom UserModel.USERNAME_FIELD.  Returns a JSON Web Token that can be used to authenticate later calls.
@@ -154,15 +148,70 @@ export interface JSONWebToken {
 /**
  * 
  * @export
+ * @interface PatchedUpdateSelfProfile
+ */
+export interface PatchedUpdateSelfProfile {
+    /**
+     * 
+     * @type {string}
+     * @memberof PatchedUpdateSelfProfile
+     */
+    'gender'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PatchedUpdateSelfProfile
+     */
+    'birth_date'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof PatchedUpdateSelfProfile
+     */
+    'location'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof PatchedUpdateSelfProfile
+     */
+    'age'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof PatchedUpdateSelfProfile
+     */
+    'icon_pass'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PatchedUpdateSelfProfile
+     */
+    'profile_message'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PatchedUpdateSelfProfile
+     */
+    'profile_user_id'?: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof PatchedUpdateSelfProfile
+     */
+    'profile_first_registed'?: boolean;
+}
+/**
+ * 
+ * @export
  * @interface Profile
  */
 export interface Profile {
     /**
      * 
-     * @type {number}
+     * @type {User}
      * @memberof Profile
      */
-    'user': number;
+    'user': User;
     /**
      * 
      * @type {string}
@@ -232,22 +281,22 @@ export interface SelfProfile {
     'id': number;
     /**
      * 
-     * @type {string}
+     * @type {User}
      * @memberof SelfProfile
      */
-    'gender'?: string;
+    'user': User;
     /**
      * 
      * @type {string}
      * @memberof SelfProfile
      */
-    'birth_date'?: string | null;
+    'profile_user_id'?: string;
     /**
      * 
-     * @type {string}
+     * @type {SelfProfileStatusEnum}
      * @memberof SelfProfile
      */
-    'location'?: string;
+    'status'?: SelfProfileStatusEnum;
     /**
      * 
      * @type {number}
@@ -259,31 +308,7 @@ export interface SelfProfile {
      * @type {string}
      * @memberof SelfProfile
      */
-    'icon_pass'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SelfProfile
-     */
-    'profile_message'?: string;
-    /**
-     * 
-     * @type {SelfProfileStatusEnum}
-     * @memberof SelfProfile
-     */
-    'status'?: SelfProfileStatusEnum;
-    /**
-     * 
-     * @type {string}
-     * @memberof SelfProfile
-     */
-    'profile_user_id'?: string;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof SelfProfile
-     */
-    'sensitive_entry'?: boolean;
+    'birth_date'?: string | null;
     /**
      * 
      * @type {number}
@@ -298,16 +323,40 @@ export interface SelfProfile {
     'follower_count'?: number;
     /**
      * 
+     * @type {string}
+     * @memberof SelfProfile
+     */
+    'gender'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SelfProfile
+     */
+    'icon_pass'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SelfProfile
+     */
+    'location'?: string;
+    /**
+     * 
      * @type {boolean}
      * @memberof SelfProfile
      */
     'profile_first_registed'?: boolean;
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof SelfProfile
      */
-    'user': number;
+    'profile_message'?: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof SelfProfile
+     */
+    'sensitive_entry'?: boolean;
 }
 /**
  * 
@@ -317,12 +366,67 @@ export interface SelfProfile {
 
 export enum SelfProfileStatusEnum {
     Close = 'close',
-    Official = 'official',
     Block = 'block',
+    Public = 'public',
     Machine = 'machine',
-    Public = 'public'
+    Official = 'official'
 }
 
+/**
+ * 
+ * @export
+ * @interface UpdateSelfProfile
+ */
+export interface UpdateSelfProfile {
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateSelfProfile
+     */
+    'gender'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateSelfProfile
+     */
+    'birth_date'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateSelfProfile
+     */
+    'location'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof UpdateSelfProfile
+     */
+    'age'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateSelfProfile
+     */
+    'icon_pass'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateSelfProfile
+     */
+    'profile_message'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateSelfProfile
+     */
+    'profile_user_id'?: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof UpdateSelfProfile
+     */
+    'profile_first_registed'?: boolean;
+}
 /**
  * 
  * @export
@@ -349,6 +453,50 @@ export interface User {
  */
 export const ApiApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
+        /**
+         * 
+         * @param {Entry} entry 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiCreateEntryCreate: async (entry: Entry, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'entry' is not null or undefined
+            assertParamExists('apiCreateEntryCreate', 'entry', entry)
+            const localVarPath = `/api/create/entry/`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication basicAuth required
+            // http basic authentication required
+            setBasicAuthToObject(localVarRequestOptions, configuration)
+
+            // authentication cookieAuth required
+
+            // authentication jwtAuth required
+            await setApiKeyToObject(localVarHeaderParameter, "Authorization", configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(entry, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
         /**
          * 
          * @param {*} [options] Override http request option.
@@ -560,6 +708,98 @@ export const ApiApiAxiosParamCreator = function (configuration?: Configuration) 
         /**
          * 
          * @param {number} id 
+         * @param {PatchedUpdateSelfProfile} [patchedUpdateSelfProfile] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiUpdateSelfprofilePartialUpdate: async (id: number, patchedUpdateSelfProfile?: PatchedUpdateSelfProfile, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('apiUpdateSelfprofilePartialUpdate', 'id', id)
+            const localVarPath = `/api/update/selfprofile/{id}/`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication basicAuth required
+            // http basic authentication required
+            setBasicAuthToObject(localVarRequestOptions, configuration)
+
+            // authentication cookieAuth required
+
+            // authentication jwtAuth required
+            await setApiKeyToObject(localVarHeaderParameter, "Authorization", configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(patchedUpdateSelfProfile, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {UpdateSelfProfile} [updateSelfProfile] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiUpdateSelfprofileUpdate: async (id: number, updateSelfProfile?: UpdateSelfProfile, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('apiUpdateSelfprofileUpdate', 'id', id)
+            const localVarPath = `/api/update/selfprofile/{id}/`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication basicAuth required
+            // http basic authentication required
+            setBasicAuthToObject(localVarRequestOptions, configuration)
+
+            // authentication cookieAuth required
+
+            // authentication jwtAuth required
+            await setApiKeyToObject(localVarHeaderParameter, "Authorization", configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(updateSelfProfile, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -609,6 +849,16 @@ export const ApiApiAxiosParamCreator = function (configuration?: Configuration) 
 export const ApiApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = ApiApiAxiosParamCreator(configuration)
     return {
+        /**
+         * 
+         * @param {Entry} entry 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiCreateEntryCreate(entry: Entry, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Entry>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiCreateEntryCreate(entry, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
         /**
          * 
          * @param {*} [options] Override http request option.
@@ -661,6 +911,28 @@ export const ApiApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {number} id 
+         * @param {PatchedUpdateSelfProfile} [patchedUpdateSelfProfile] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiUpdateSelfprofilePartialUpdate(id: number, patchedUpdateSelfProfile?: PatchedUpdateSelfProfile, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UpdateSelfProfile>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiUpdateSelfprofilePartialUpdate(id, patchedUpdateSelfProfile, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {UpdateSelfProfile} [updateSelfProfile] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiUpdateSelfprofileUpdate(id: number, updateSelfProfile?: UpdateSelfProfile, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UpdateSelfProfile>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiUpdateSelfprofileUpdate(id, updateSelfProfile, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -678,6 +950,15 @@ export const ApiApiFp = function(configuration?: Configuration) {
 export const ApiApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = ApiApiFp(configuration)
     return {
+        /**
+         * 
+         * @param {Entry} entry 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiCreateEntryCreate(entry: Entry, options?: any): AxiosPromise<Entry> {
+            return localVarFp.apiCreateEntryCreate(entry, options).then((request) => request(axios, basePath));
+        },
         /**
          * 
          * @param {*} [options] Override http request option.
@@ -725,6 +1006,26 @@ export const ApiApiFactory = function (configuration?: Configuration, basePath?:
         /**
          * 
          * @param {number} id 
+         * @param {PatchedUpdateSelfProfile} [patchedUpdateSelfProfile] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiUpdateSelfprofilePartialUpdate(id: number, patchedUpdateSelfProfile?: PatchedUpdateSelfProfile, options?: any): AxiosPromise<UpdateSelfProfile> {
+            return localVarFp.apiUpdateSelfprofilePartialUpdate(id, patchedUpdateSelfProfile, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {UpdateSelfProfile} [updateSelfProfile] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiUpdateSelfprofileUpdate(id: number, updateSelfProfile?: UpdateSelfProfile, options?: any): AxiosPromise<UpdateSelfProfile> {
+            return localVarFp.apiUpdateSelfprofileUpdate(id, updateSelfProfile, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -741,6 +1042,17 @@ export const ApiApiFactory = function (configuration?: Configuration, basePath?:
  * @extends {BaseAPI}
  */
 export class ApiApi extends BaseAPI {
+    /**
+     * 
+     * @param {Entry} entry 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ApiApi
+     */
+    public apiCreateEntryCreate(entry: Entry, options?: AxiosRequestConfig) {
+        return ApiApiFp(this.configuration).apiCreateEntryCreate(entry, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @param {*} [options] Override http request option.
@@ -793,6 +1105,30 @@ export class ApiApi extends BaseAPI {
      */
     public apiSelfprofileRetrieve(user: number, options?: AxiosRequestConfig) {
         return ApiApiFp(this.configuration).apiSelfprofileRetrieve(user, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} id 
+     * @param {PatchedUpdateSelfProfile} [patchedUpdateSelfProfile] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ApiApi
+     */
+    public apiUpdateSelfprofilePartialUpdate(id: number, patchedUpdateSelfProfile?: PatchedUpdateSelfProfile, options?: AxiosRequestConfig) {
+        return ApiApiFp(this.configuration).apiUpdateSelfprofilePartialUpdate(id, patchedUpdateSelfProfile, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} id 
+     * @param {UpdateSelfProfile} [updateSelfProfile] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ApiApi
+     */
+    public apiUpdateSelfprofileUpdate(id: number, updateSelfProfile?: UpdateSelfProfile, options?: AxiosRequestConfig) {
+        return ApiApiFp(this.configuration).apiUpdateSelfprofileUpdate(id, updateSelfProfile, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

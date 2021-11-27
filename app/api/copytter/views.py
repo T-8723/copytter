@@ -6,7 +6,7 @@ from django_filters import rest_framework as filters
 
 from .models import Entry, Follow, Profile
 from django.contrib.auth.models import User
-from .serializers import EntrySerializer, FollowSerializer, SelfProfileSerializer, ProfileSerializer, UserSerializer
+from .serializers import EntrySerializer, FollowSerializer, SelfProfileSerializer, ProfileSerializer, UserSerializer, UpdateSelfProfileSerializer
 
 
 class UserRetrieveAPIView(generics.RetrieveAPIView):
@@ -19,6 +19,12 @@ class SelfProfileRetrieveAPIView(generics.RetrieveAPIView):
     permission_classes = (permissions.IsAuthenticated,)
     serializer_class = SelfProfileSerializer
     lookup_field = 'user'
+    queryset = Profile.objects.all()
+
+
+class UpdateSelfProfileAPIView(generics.UpdateAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = UpdateSelfProfileSerializer
     queryset = Profile.objects.all()
 
 
@@ -45,6 +51,12 @@ class FollowEntryListAPIView(generics.ListAPIView):
             queryset=Entry.objects.all())
         serializer = EntrySerializer(instance=filterset.qs, many=True)
         return Response(serializer.data)
+
+
+class EntryCreateAPIView(generics.CreateAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = EntrySerializer
+    queryset = Entry.objects.all()
 
 
 class EntryListAPIView(generics.ListAPIView):

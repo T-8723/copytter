@@ -17,6 +17,20 @@ class SelfProfileSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class UpdateSelfProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = (
+            'gender',
+            'birth_date',
+            'location',
+            'age',
+            'icon_pass',
+            'profile_message',
+            'profile_user_id',
+            'profile_first_registed')
+
+
 class ProfileSerializer(serializers.ModelSerializer):
     user = UserSerializer()
 

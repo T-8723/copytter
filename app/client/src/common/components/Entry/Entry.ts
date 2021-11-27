@@ -23,19 +23,17 @@ export default class Entry extends Vue {
   data(): {
     profile: Profile;
     user: User;
+    circleUrl: string;
   } {
     return {
       profile: this.profile,
       user: this.user,
+      circleUrl: this.circleUrl,
     };
   }
 
   mounted(): void {
-    this.user = this.entry.author;
-    this.getProfile(this.entry.author.id);
-  }
-
-  async getProfile(id: number): Promise<void> {
-    this.profile = (await this.API.apiProfileRetrieve(id)).data;
+    this.user = this.entry.author.user;
+    this.profile = this.entry.author;
   }
 }

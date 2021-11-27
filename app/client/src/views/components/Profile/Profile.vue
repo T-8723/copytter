@@ -4,11 +4,11 @@
     <el-main>
       <div class="form-box">
         <el-alert
-          title="入力された情報ではログイン出来ません"
+          title="入力された情報では登録出来ません"
           type="error"
           center
           show-icon
-          v-if="!auth_check"
+          v-if="!regist_check"
         ></el-alert>
         <el-form ref="refForm" :model="form" status-icon :rules="rules" label-width="180px">
           <el-form-item label="ユーザーID">
@@ -39,7 +39,7 @@
           </el-form-item>
 
           <el-form-item>
-            <el-button @submit="registProfile">登録</el-button>
+            <el-button @click="registProfile">登録</el-button>
           </el-form-item>
         </el-form>
       </div>
