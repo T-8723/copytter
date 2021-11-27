@@ -7,8 +7,8 @@
     "build:local": "vue-cli-service build  --mode development",
     "build": "vue-cli-service build --dest ../api/resources/dist/  --mode production",
     "lint": "vue-cli-service lint",
-    "doc": "npx typedoc --out ../../docs/forntend/",
-    "doc:watch": "npx typedoc --watch --out ../../docs/forntend/",
+    "doc": "npx typedoc --out ../../docs/client/",
+    "doc:watch": "npx typedoc --watch --out ../../docs/client/",
     "openapi:gen": "openapi-generator-cli generate -g typescript-axios -i ../api/schema.yml -o ./src/common/services/openapi"
   },
   "dependencies": {

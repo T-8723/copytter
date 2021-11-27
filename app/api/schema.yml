@@ -567,11 +567,11 @@ components:
       - user
     SelfProfileStatusEnum:
       enum:
-      - close
-      - block
-      - public
       - machine
       - official
+      - close
+      - public
+      - block
       type: string
     UpdateSelfProfile:
       type: object

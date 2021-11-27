@@ -9,13 +9,17 @@
   - [構成](#構成)
   - [現状](#現状)
     - [2021/11/27](#20211127)
+  - [(一応)プロジェクトの使い方](#一応プロジェクトの使い方)
+  - [開発・デプロイまでの流れ](#開発デプロイまでの流れ)
+  - [各ドキュメントファイル出力](#各ドキュメントファイル出力)
   - [設計・備忘録](#設計備忘録)
     - [環境](#環境)
-      - [Googke AppEngne の使い方マジでわからん](#googke-appengne-の使い方マジでわからん)
+      - [Googke AppEngne の使い方わからん](#googke-appengne-の使い方わからん)
       - [デプロイまでのざっくりした流れ](#デプロイまでのざっくりした流れ)
       - [心臓に悪い](#心臓に悪い)
     - [Django](#django)
       - [はじめての Django](#はじめての-django)
+    - [セットアップ](#セットアップ)
       - [モデル設定](#モデル設定)
       - [ドキュメント生成](#ドキュメント生成)
       - [備忘録・詰まったとこ](#備忘録詰まったとこ)
@@ -25,12 +29,11 @@
         - [djangorestframework、djangorestframework-jwt](#djangorestframeworkdjangorestframework-jwt)
     - [Vue](#vue)
       - [初めての Vue.js](#初めての-vuejs)
+    - [セットアップ](#セットアップ-1)
       - [お作法](#お作法)
       - [TypeDoc との連携](#typedoc-との連携)
       - [デザイン](#デザイン)
       - [openapi-generator-cli すごい](#openapi-generator-cli-すごい)
-  - [(一応)プロジェクトの使い方](#一応プロジェクトの使い方)
-  - [開発・デプロイまでの流れ](#開発デプロイまでの流れ)
 
 ## 目的
 
@@ -74,7 +77,7 @@
 3. 課題 1 後の代替を意識してドキュメント自動生成ツールを使用して設計ドキュメントをなるべく簡単に出力できるようにする。
 
    - フロントサイド： TypeDoc
-   - バックエンド： OpenAPI
+   - API： Redoc(OpenAPI)
 
 ## 構成
 
@@ -107,11 +110,48 @@
 今後も少しずつ手を入れていくつもりです。
 
 
+## (一応)プロジェクトの使い方
+
+Python3、NodeJS をインストール済みとして想定
+
+1. GCP SDK のダウンロード、インストール
+2. cloud_sql_proxy.exe を app/api/配下に配置する
+3. API 側（./app/api）、Clinnt 側（./app/client/）で別ウィンドウで VSCode を立ち上げ
+4. API : DB ローカル接続設定 `../../../cloud_sql_proxy -instances=[project nmae]:[Cluod SQL instance]:5432`
+5. API : Django ローカルサーバー立ち上げ `python manage.py runserver`
+6. Client : npm パッケージ依存関係インストール `npm install`
+7. Client : Vue ローカルサーバー立ち上げ `npm run serve`
+
+## 開発・デプロイまでの流れ
+
+1. モデル（models.py）でデータモデルを定義・修正
+2. マイグレーション`python manage.py makemigrations` `python manage.py migrate` を実行
+3. スキーマ定義 YAML の出力 `python manage.py spectacular --file schema.yml`
+4. スキーマ定義からクライアント側からの API 呼び出しコードを生成 `npm run openapi:gen`
+5. 画面を作成
+6. クライアントアプリケーションのビルド `npm run build`
+7. GCP にデプロイ `gcloud app deploy --project=<ProjectID>`
+
+
+## 各ドキュメントファイル出力
+
+API仕様を drf-spectacular、フロントサイド仕様を typedoc を使用して出力します。
+
+- API仕様: （app/api直下で）`npx redoc-cli bundle ./schema.yml --output ../../docs/api/api_doc.html`
+- フロントサイド仕様: （app/client直下で） `npm run doc`
+
+出力先は [./docs/api](./docs/api/api_doc.html)、[./docs/client](./docs/client/indx.html)にそれぞれ出力されます。
+更新追跡でリアルタイムで反映を確認したい場合は
+
+- API仕様: http://127.0.0.1:8000/api/schema/redoc へアクセス
+- フロントサイド仕様: （app/client直下で） `npm run doc:watch`
+
+
 ## 設計・備忘録
 
 ### 環境
 
-#### Googke AppEngne の使い方マジでわからん
+#### Googke AppEngne の使い方わからん
 
 Google のドキュメントは量も多いしワードも難解…自分のオツムに呆れます。  
 [公式ガイド](https://cloud.google.com/python/django?hl=ja)通りにやったつもりが何故かエラーが頻発しました。  
@@ -124,7 +164,8 @@ Google のドキュメントは量も多いしワードも難解…自分のオ�
 
 #### デプロイまでのざっくりした流れ
 
-基本的に[公式](https://cloud.google.com/python/django/appengine?hl=ja#header)に沿って実行。
+基本的に[公式](https://cloud.google.com/python/django/appengine?hl=ja#header)に沿って実行。  
+悪戦苦闘しながら構築を進めたため記憶が曖昧です…今後もう少し詳細に補完していきます。
 
 1. プロジェクトの作成
    - ![スクショ 1](./docs/img/gcp_01.png '画面上部をクリック')
@@ -135,9 +176,15 @@ Google のドキュメントは量も多いしワードも難解…自分のオ�
    - 有効化するサービスは、App Engne、Cloud SQL、Secret Manager など
 3. SDK のダウンロード、インストール
    - [ダウンロード](https://cloud.google.com/sdk/docs/install?hl=ja)
+   - `gcloud --version` でインストール確認
 4. django プロジェクトの作成
 5. app.yaml の記述
+   - runtime にPythonバージョンを指定
+   - entrypoint にサーバー起動用のエントリーポイントを指定
+   - handlers: url: /static 項目に `resources/dist/static` を設定（静的ファイルの配置先を指定する必要がある）
+   - handlers: url: .*　転送設定。`secure: always`でHTTPのアクセスをHTTPSにリダイレクトする
 6. デプロイコマンドの実行
+   - `gcloud app deploy --project=<ProjectID>` 
 
 #### 心臓に悪い
 
@@ -178,9 +225,17 @@ Cloud SQL は最安価の構成で組みましたが、**放置でも請求が�
 - flake8 : フォーマッター
 - gunicorn : 何者…？
 
+### セットアップ
+
+参考: [公式チュートリアル](https://docs.djangoproject.com/ja/3.2/intro/tutorial01/)
+1. 仮想環境の構築 `python -m venv .venv`
+2. Djangoのインストール `pip install django`
+3. プロジェクトの作成 `django-admin startproject <サーバー名 = 生成されるディレクトリ名>` ※本プロジェクトでは config となっております。（プロジェクト名なのでこれが適切ではないと思いますが、生成されるファイルに基本設定などが書かれるためわかりやすさを優先しました。）
+4. アプリケーションの作成 `python manage.py startapp <アプリケーション名 = 生成されるディレクトリ名>` ※ 本プロジェクトでは copytter となっております。
+
 #### モデル設定
 
-基本的に作りながら調べて設計に起こす、みたいな流れで作っているため、設計書的なものを作る練習もいずれしないとな…と思う今日この頃…  
+基本的に作りながら調べて設計に起こす、のような流れで作っているため、設計書的なものを作る練習もいずれしないとな…と思う今日この頃…  
 とりあえず最低限このくらいはいるかなーと思って定義して、これが足りないあれが足りない…と継ぎ足しした結果、最終的に落ち着いたのは下記の通りです。
 
 - Profile モデル : ユーザーに紐づいて作成されるユーザープロフィールの情報。ユーザーは Django の機能使って自動生成しているのでカスタマイズするには色々ノウハウがあるようなのですが、今回は User の生成と同時に連携したデータを生成するような流れにしました。デフォルトの User に登録される情報はパスワードやメールアドレスなど機密性の高い情報なので弄らず、Twiter で言うところのフォロワー数やアイコン画像のような公開情報を別管理とすることで、一覧検索なども実装しやすいと思われたのも理由の一つです。
@@ -293,6 +348,13 @@ TypeScript との相性も Angular の方がいいイメージで、型をきっ
 - element-plus : UI コンポーネントライブラリ
 - @element-plus/icons : element-plus の icon ライブラリ
 - @openapitools/openapi-generator-cli : OpenAPI スキーマ定義からコードを自動生成するライブラリ
+
+### セットアップ
+
+参考: [公式ガイド](https://cli.vuejs.org/guide/installation.html)
+1. CLIのインストール `npm install -g @vue/cli`
+2. プロジェクトの作成 `vue create <プロジェクト名>`
+
 
 #### お作法
 
@@ -487,25 +549,3 @@ this.API_auth.authCreate({
   });
 
 ```
-
-## (一応)プロジェクトの使い方
-
-Python3、NodeJS をインストール済みとして想定
-
-1. GCP の環境を設定する-[参考](https://cloud.google.com/python/django/appengine?hl=ja)
-2. 上記、cloud_sql_proxy.exe を app/api/配下に配置する
-3. API 側、Clinnt 側で別ウィンドウで VSCode を立ち上げ
-4. API : DB ローカル接続設定 `../../../cloud_sql_proxy -instances=[project nmae]:[Cluod SQL instance]:5432`
-5. API : Django ローカルサーバー立ち上げ `python manage.py runserver`
-6. Client : npm パッケージ依存関係インストール `npm install`
-7. Client : Vue ローカルサーバー立ち上げ `npm run serve`
-
-## 開発・デプロイまでの流れ
-
-1. モデル（models.py）でデータモデルを定義・修正
-2. マイグレーション`python manage.py makemigrations` `python manage.py migrate` を実行
-3. スキーマ定義 YAML の出力 `python manage.py spectacular --file schema.yml`
-4. スキーマ定義からクライアント側からの API 呼び出しコードを生成 `npm run openapi:gen`
-5. 画面を作成
-6. クライアントアプリケーションのビルド `npm run build`
-7. GCP にデプロイ `gcloud app deploy --project=copytter`
