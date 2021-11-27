@@ -23,3 +23,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 ### Code generate from OpenAPI Schema yaml file
 
 `npm run openapi:gen`
+
+### Output Documents
+
+`npm run doc`

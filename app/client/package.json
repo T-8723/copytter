@@ -7,6 +7,8 @@
     "build:local": "vue-cli-service build  --mode development",
     "build": "vue-cli-service build --dest ../api/resources/dist/  --mode production",
     "lint": "vue-cli-service lint",
+    "doc": "npx typedoc --out ../../docs/forntend/",
+    "doc:watch": "npx typedoc --watch --out ../../docs/forntend/",
     "openapi:gen": "openapi-generator-cli generate -g typescript-axios -i ../api/schema.yml -o ./src/common/services/openapi"
   },
   "dependencies": {
@@ -39,7 +41,6 @@
     "prettier": "^2.2.1",
     "sass": "^1.26.5",
     "sass-loader": "^8.0.2",
-    "typedoc": "^0.22.5",
     "typescript": "~4.1.5"
   }
 }

@@ -7,6 +7,8 @@
   - [課題](#課題)
   - [要件](#要件)
   - [構成](#構成)
+  - [現状](#現状)
+    - [2021/11/27](#20211127)
   - [設計・備忘録](#設計備忘録)
     - [環境](#環境)
       - [Googke AppEngne の使い方マジでわからん](#googke-appengne-の使い方マジでわからん)
@@ -46,9 +48,18 @@
 
 3. Google Cloud Platform (GoogleAppEngine など)の使い方を把握する
 
+
 ## 要件
 
-1. Twiter のミニブログサービスとしての最低限の要素を実装する。
+1. アプリケーションの基本構成は以下の通り
+
+   - クラウドプラットフォーム： [Google Cloud Platform](https://cloud.google.com/gcp/)
+   - サービス： [AppEngine](https://cloud.google.com/appengine/)
+   - フロントサイド： [Vue.js 3(TypeScript)](https://v3.ja.vuejs.org)
+   - バックエンド: [django(Python)](https://docs.djangoproject.com/ja/3.2/)
+   - DB-MySQL： [Goolge Cloud SQL](https://cloud.google.com/sql/)
+
+2. Twiter のミニブログサービスとしての最低限の要素を実装する。
 
    - タイムライン
      - 最大文字数 300 文字を上限とした記事投稿機能
@@ -59,14 +70,6 @@
      - フォロー、フォロワー一覧閲覧機能
      - ユーザー検索機能
    - ~~Google・Twiter と連携したソーシャルログインの実装~~ 今回はとりあえず保留
-
-2. アプリケーションの基本構成は以下の通り
-
-   - クラウドプラットフォーム： [Google Cloud Platform](https://cloud.google.com/gcp/)
-   - サービス： [AppEngine](https://cloud.google.com/appengine/)
-   - フロントサイド： [Vue.js 3(TypeScript)](https://v3.ja.vuejs.org)
-   - バックエンド: [django(Python)](https://docs.djangoproject.com/ja/3.2/)
-   - DB-MySQL： [Goolge Cloud SQL](https://cloud.google.com/sql/)
 
 3. 課題 1 後の代替を意識してドキュメント自動生成ツールを使用して設計ドキュメントをなるべく簡単に出力できるようにする。
 
@@ -93,6 +96,16 @@
           - Search : 投稿・ユーザー検索画面
         - router : Vue 側ルーティング定義
 - docs : 関連ドキュメント
+
+
+## 現状
+
+### 2021/11/27
+
+アプリケーションの基本構成（Google Cloud Platform へのデプロイ、Cloud Platform でのサービス有効化、フロント・バックエンドの環境構築、バックエンドのＤＢ連携）は一通り完了して、実際に[Google上のページ](https://copytter.an.r.appspot.com/Home)でアクセス可能な状態です。  
+本来であれば、ログイン → 閲覧 → 投稿 のあたりまで作成して公開すべきかと思いましたが、とりあえずログインと閲覧の動作確認ができる程度の完成度です…  
+今後も少しずつ手を入れていくつもりです。
+
 
 ## 設計・備忘録
 
